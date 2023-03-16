@@ -1,0 +1,15 @@
+{
+    "bracketSpacing": false,
+    "jsxBracketSameLine": false,
+    "jsxSingleQuote": false,
+    "printWidth": 95,
+    "proseWrap": "always",
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 4,
+    "trailingComma": "es5",
+    "useTabs": false,
+    "importOrder": [],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true
+}
