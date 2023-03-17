@@ -8,13 +8,8 @@ import {Character, PagedCharactersRsp} from '../models/index';
 export class CharactersService {
     constructor(private http: HttpClient) {}
 
-    private charactersUrl = 'https://api.disneyapi.dev/characters';
-
-    getCharacters(): Observable<Character[]> {
-        return this.http.get<PagedCharactersRsp>(this.charactersUrl).pipe(
-            map((rsp: PagedCharactersRsp) => {
-                return rsp.data;
-            })
-        );
+    getCharacters(page: number, pageSize: number): Observable<PagedCharactersRsp> {
+        let charactersUrl = `https://api.disneyapi.dev/characters?page=${page}&pageSize=${pageSize}`;
+        return this.http.get<PagedCharactersRsp>(charactersUrl);
     }
 }

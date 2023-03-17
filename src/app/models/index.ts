@@ -15,7 +15,7 @@ export interface Character {
 export interface PagedCharactersRsp {
     data: Character[];
     count: number;
-    previousPage: string;
+    totalPages: number;
     nextPage: string;
 }
 
