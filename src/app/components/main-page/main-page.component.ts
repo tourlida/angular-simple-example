@@ -1,10 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {Observable, map} from 'rxjs';
+import {Observable, map, tap} from 'rxjs';
 import {Character, PagedCharactersRsp} from 'src/app/models';
 import {CharactersService} from 'src/app/services/characters.service';
 
 import * as _ from 'lodash';
 import {PageEvent} from '@angular/material/paginator';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {ModalComponent} from './modal/modal.component';
 
 @Component({
     selector: 'main-page',
@@ -15,15 +17,15 @@ export class MainPageComponent implements OnInit {
     fetchedCharacters: Character[] | undefined;
     fetchedPagedCharactersFullInfo: Observable<PagedCharactersRsp> | undefined;
     tableRows: any;
-    tableColumns: {[key: string]: string}[] = [
-        {name: 'Id'},
-        {name: 'Name'},
-        {name: 'Tv shows'},
-        {name: 'Video games'},
-        {name: 'Allies'},
-        {name: 'Enemies'},
+    tableColumns: any[] = [
+        {name: 'Id', sortable: false},
+        {name: 'Name', sortable: true},
+        {name: 'Tv shows', sortable: false},
+        {name: 'Video games', sortable: false},
+        {name: 'Allies', sortable: false},
+        {name: 'Enemies', sortable: false},
     ];
-    columnsKeys = ['_id', 'name', 'tvShows', 'videoGames', 'allies', 'enemies'];
+    columnsKeys = ['_id', 'name', 'tvShows', 'videoGames', 'allies', 'enemies', 'imageUrl'];
 
     currentPage: number = 1;
 
@@ -36,8 +38,13 @@ export class MainPageComponent implements OnInit {
     showPageSizeOptions = true;
     showFirstLastButtons = true;
     disabled = false;
+
+    isModalOpen = false;
+
+    selectedCharacter: Character | undefined;
+
     //---------------------------------------------------------------------------
-    constructor(private charactersService: CharactersService) {}
+    constructor(private charactersService: CharactersService, private dialog: MatDialog) {}
     //---------------------------------------------------------------------------
     ngOnInit() {
         this.loadData();
@@ -96,5 +103,21 @@ export class MainPageComponent implements OnInit {
         this.currentPage = e.pageIndex;
 
         this.loadData();
+    }
+
+    handleRowClick(row: Character) {
+        this.openDialog(row);
+    }
+
+    openDialog(row: any) {
+        this.selectedCharacter = row;
+
+        this.dialog
+            .open(ModalComponent, {
+                width: '600px',
+                data: row,
+            })
+            .afterClosed()
+            .pipe(tap(() => (this.selectedCharacter = undefined)));
     }
 }

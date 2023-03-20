@@ -8,15 +8,22 @@ import {TableComponent} from './components/main-page/table/table.component';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ModalComponent} from './components/main-page/modal/modal.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatListModule} from '@angular/material/list';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
-    declarations: [AppComponent, MainPageComponent, TableComponent],
+    declarations: [AppComponent, MainPageComponent, TableComponent, ModalComponent],
     imports: [
         BrowserModule,
         HttpClientModule,
         NgxDatatableModule,
         MatPaginatorModule,
         BrowserAnimationsModule,
+        MatDialogModule,
+        MatListModule,
+        MatIconModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

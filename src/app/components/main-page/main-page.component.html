@@ -1,17 +1,20 @@
-<div>
-    <app-table [rows]="tableRows" [columns]="tableColumns"></app-table>
-    <mat-paginator
-        #paginator
-        class="demo-paginator"
-        (page)="handlePageEvent($event)"
-        [length]="totalPages"
-        [pageSize]="pageLimit"
-        [disabled]="disabled"
-        [showFirstLastButtons]="showFirstLastButtons"
-        [pageSizeOptions]="showPageSizeOptions ? pageLimitOptions : []"
-        [hidePageSize]="hidePageSize"
-        [pageIndex]="currentPage"
-        aria-label="Select page"
-    >
-    </mat-paginator>
-</div>
+<app-table
+    [rows]="tableRows"
+    [columns]="tableColumns"
+    (onRowClick)="handleRowClick($event)"
+></app-table>
+<mat-paginator
+    #paginator
+    class="demo-paginator"
+    (page)="handlePageEvent($event)"
+    [length]="totalPages"
+    [pageSize]="pageLimit"
+    [disabled]="disabled"
+    [showFirstLastButtons]="showFirstLastButtons"
+    [pageSizeOptions]="showPageSizeOptions ? pageLimitOptions : []"
+    [hidePageSize]="hidePageSize"
+    [pageIndex]="currentPage"
+    aria-label="Select page"
+>
+</mat-paginator>
+<app-modal *ngIf="isModalOpen"></app-modal>
