@@ -10,16 +10,20 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalComponent } from './components/main-page/modal/modal.component';
 import { Material } from './material.module';
+import { HighchartsChartModule } from 'highcharts-angular';
+import { ChartComponent } from './components/main-page/chart/chart.component';
+
 
 @NgModule({
-    declarations: [AppComponent, MainPageComponent, TableComponent, ModalComponent],
+    declarations: [AppComponent, MainPageComponent, TableComponent, ModalComponent, ChartComponent],
     imports: [
         BrowserModule,
         HttpClientModule,
         NgxDatatableModule,
         MatPaginatorModule,
         BrowserAnimationsModule,
-        Material
+        Material,
+        HighchartsChartModule
     ],
     providers: [],
     bootstrap: [AppComponent],

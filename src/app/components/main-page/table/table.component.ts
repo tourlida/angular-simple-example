@@ -6,7 +6,6 @@ import {
     OnInit,
     Output,
 } from '@angular/core';
-import {Observable} from 'rxjs';
 import * as _ from 'lodash';
 @Component({
     selector: 'app-table',

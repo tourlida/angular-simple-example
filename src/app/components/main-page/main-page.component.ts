@@ -1,12 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {Observable, map, tap} from 'rxjs';
-import {Character, PagedCharactersRsp} from 'src/app/models';
-import {CharactersService} from 'src/app/services/characters.service';
+import {  Component, OnInit } from '@angular/core';
+import { Observable, map, tap } from 'rxjs';
+import { Character, PagedCharactersRsp } from 'src/app/models';
+import { CharactersService } from 'src/app/services/characters.service';
 
 import * as _ from 'lodash';
-import {PageEvent} from '@angular/material/paginator';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {ModalComponent} from './modal/modal.component';
+import { PageEvent } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalComponent } from './modal/modal.component';
+import * as Highcharts from 'highcharts';
 
 @Component({
     selector: 'main-page',
@@ -18,14 +19,14 @@ export class MainPageComponent implements OnInit {
     fetchedPagedCharactersFullInfo: Observable<PagedCharactersRsp> | undefined;
     tableRows: any;
     tableColumns: any[] = [
-        {name: 'Id', sortable: false},
-        {name: 'Name', sortable: true},
-        {name: 'Tv shows', sortable: false},
-        {name: 'Video games', sortable: false},
-        {name: 'Allies', sortable: false},
-        {name: 'Enemies', sortable: false},
+        { name: 'Id', sortable: false },
+        { name: 'Name', sortable: true },
+        { name: 'Tv shows', sortable: false },
+        { name: 'Video games', sortable: false },
+        { name: 'Allies', sortable: false },
+        { name: 'Enemies', sortable: false },
     ];
-    columnsKeys = ['_id', 'name', 'tvShows', 'videoGames', 'allies', 'enemies', 'imageUrl'];
+    columnsKeys = ['_id', 'name', 'tvShows', 'videoGames', 'allies', 'enemies', 'imageUrl', 'films'];
 
     currentPage: number = 1;
 
@@ -42,9 +43,12 @@ export class MainPageComponent implements OnInit {
     isModalOpen = false;
 
     selectedCharacter: Character | undefined;
+    //---------------------------------------------------------------------------
+    chartOptions: Highcharts.Options = {};
+    highCharts: typeof Highcharts = Highcharts;
 
     //---------------------------------------------------------------------------
-    constructor(private charactersService: CharactersService, private dialog: MatDialog) {}
+    constructor(private charactersService: CharactersService, private dialog: MatDialog) { }
     //---------------------------------------------------------------------------
     ngOnInit() {
         this.loadData();
@@ -87,11 +91,60 @@ export class MainPageComponent implements OnInit {
                 (data) => {
                     this.tableRows = [...data.data];
                     this.totalPages = data.totalPages;
+
+                    //Configure Chart Options
+                    this.chartOptions = this.configureChartOptions(data.data) as any;
+        
                 },
                 (err) => {
                     console.log('There was an error: ' + err);
                 }
             );
+    }
+    //--------------------------------------------------------------------------
+    public configureChartOptions(initialData: any) {
+
+        return {
+            chart: {
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'Table Page Characters Results',
+                align: 'left'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                    }
+                }
+            },
+            series: [
+                {
+                    name: 'Brands',
+                    colorByPoint: true,
+                    type: 'pie',
+                    data: _.map(initialData, item => {
+                        return {
+                            name: item.name,
+                            y: item.films.length
+                        }
+                    }) as any
+                },
+            ]
+        }
     }
     //---------------------------------------------------------------------------
     public onPageChange(event: any): void {
